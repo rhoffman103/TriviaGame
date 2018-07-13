@@ -1,0 +1,23 @@
+body {
+    background-image: url(../images/rick-and-morty-background.jpg);
+    background-position: 50% 5%;
+    background-size: auto;
+    
+}
+
+header {
+    color: blue;
+
+}
+div.card {
+    max-width: 560px;
+}
+
+.list-group-item:hover {
+    color: white;
+    background: #75d52f;
+}
+
+.list-group-item:active {
+    background: #00a303;
+}
