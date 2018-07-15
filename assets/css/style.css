@@ -9,15 +9,32 @@ header {
     color: blue;
 
 }
-div.card {
+
+.timer-style {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 30px;
+    text-align: center;
+    color: red;
+    margin: 0;
+}
+
+.card-img-top{
+    max-height: 265px !important;
+}
+
+div.tally-card {
+    display: none;
+}
+
+div.card, .timer-style {
     max-width: 560px;
 }
 
-.list-group-item:hover {
+.choices:hover, .try-again:hover {
     color: white;
-    background: #75d52f;
+    background: #00a303;
 }
 
-.list-group-item:active {
-    background: #00a303;
+.choices:active, .try-again:active {
+    background: #75d52f;
 }
