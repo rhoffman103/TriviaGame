@@ -5,6 +5,7 @@ $(document).ready(function() {
         incorrectAnswers: 0,
         answer: "",
         unanswered: 0,
+        tallyCard: false,
 
         displayTally: function() {
             $(".questions-card").hide();
@@ -12,6 +13,7 @@ $(document).ready(function() {
             $("#correct").text(this.correctAnswers);
             $("#incorrect").text(this.incorrectAnswers);
             $("#unanswered").text(this.unanswered);
+            this.tallyCard = true;
         }
     };
 
@@ -66,23 +68,27 @@ $(document).ready(function() {
 
         getQuestionCard: function() {
             if (this.totalQuestions.length == 0) {
-                player.displayTally();
                 timer.stop();
+                player.displayTally();
             } else {
                 this.getQuestion();
+                this.randomlyOrderChoiceList();
                 displayQuestionAndAnswers();
             }
             timer.reset();
             timer.start();
         },
 
-        randomlyOrderAnswerList: function() {
+        randomlyOrderChoiceList: function() {
             var j = 0;
-            var order = [0, 1, 2, 3];
+            var shuffledChoices = [];
     
             for (var i = 0; i < 4; i++) {
-                j = Math.ceil(Math.random() * (3 - i));
+                j = Math.ceil(Math.random() * (this.currentChoices.length) - 1);;
+                shuffledChoices.push(this.currentChoices[j]);
+                this.currentChoices.splice(j, 1);
             }
+            this.currentChoices = shuffledChoices;
         },
 
     };
@@ -99,23 +105,23 @@ $(document).ready(function() {
         },
 
         start: function() {
-            if (!timer.timerRunning) {
+            if ((!timer.timerRunning) && (!player.tallyCard)) {
                 timer.intervalId = setInterval(timer.countDown, 1000);
-                timerRunning = true;
+                timer.timerRunning = true;
             }
         },
 
         stop: function() {
-            timer.timeLeft = (timer.time) / 1000;
-            clearInterval(timer.intervalId);
-            timerRunning = false;
-            console.log(timer.timeLeft);
+            this.timeLeft = (this.time) / 1000;
+            clearInterval(this.intervalId);
+            this.timerRunning = false;
         },
 
         countDown: function() {
             timer.time -= 1000;
             var convertToSeconds = timer.timeConvert(timer.time);
             $("#timer").text(convertToSeconds);
+            
             if (timer.time == 0) {
                 timer.stop();
                 player.unanswered++;
@@ -137,6 +143,7 @@ $(document).ready(function() {
         player.correctAnswers =   0;
         player.incorrectAnswers = 0;
         player.unanswered =       0;
+        player.tallyCard  = false;
         questionCard.setTotalQuestionsArray();
         questionCard.getQuestionCard();
         $(".tally-card").hide();
