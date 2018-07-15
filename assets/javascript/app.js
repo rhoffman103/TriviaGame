@@ -5,7 +5,6 @@ $(document).ready(function() {
         incorrectAnswers: 0,
         answer: "",
         unanswered: 0,
-        tallyCard: false,
 
         displayTally: function() {
             $(".questions-card").hide();
@@ -13,7 +12,6 @@ $(document).ready(function() {
             $("#correct").text(this.correctAnswers);
             $("#incorrect").text(this.incorrectAnswers);
             $("#unanswered").text(this.unanswered);
-            this.tallyCard = true;
         }
     };
 
@@ -27,23 +25,23 @@ $(document).ready(function() {
 
         questions: [{
             question:   "What did Rick ask Morty to smuggle through interdimensional customs?",
-            answerList: ["Schmeckles", "Mega Seeds", "Concentrated Dark Matter", "Crystallized Anthenite"],
+            choiceList: ["Schmeckles", "Mega Seeds", "Concentrated Dark Matter", "Crystallized Anthenite"],
             image:      "./assets/images/mega-seeds.jpg",
         },{
             question:   "Who are Ricks two best friends?",
-            answerList: ["Mr. Beauregard and Jerry", "Mr. Poopybutthole and Pencilvester", "Gearhead and Abradolf Lincler", "Squanchy and Birdperson"],
+            choiceList: ["Mr. Beauregard and Jerry", "Mr. Poopybutthole and Pencilvester", "Gearhead and Abradolf Lincler", "Squanchy and Birdperson"],
             image:      "./assets/images/squanchy-birdperson.png",
         },{
             question:   "Who is Ricks former lover?",
-            answerList: ["Jessica", "Tammy", "Unity", "Donna Gueterman"],
+            choiceList: ["Jessica", "Tammy", "Unity", "Donna Gueterman"],
             image:      "./assets/images/unity.png",
         },{
             question:   "What is Ricks most famous catch phrase?",
-            answerList: ["Uh-oh, summersalt jump!", "Grassss, Tastes Bad", "Wubba Lubba Dub Dub!", "Shum Shum, Shlippity Dop!"],
+            choiceList: ["Uh-oh, summersalt jump!", "Grassss, Tastes Bad", "Wubba Lubba Dub Dub!", "Shum Shum, Shlippity Dop!"],
             image:      "./assets/images/wubba-lubba.jpg"
         },{
             question:   "What did Abradolf Lincler sacrifrifice himself for to save Ricks party?",
-            answerList: ["Kalaxian Crystals", "Flurbo", "Crystallized Anthenite", "Ionic Defibulizer"],
+            choiceList: ["Kalaxian Crystals", "Flurbo", "Crystallized Anthenite", "Ionic Defibulizer"],
             image:      "./assets/images/rick-high.jpg"
         }],
 
@@ -57,7 +55,7 @@ $(document).ready(function() {
         getQuestion: function() {
             var num = Math.ceil(Math.random() * (this.totalQuestions.length) - 1);
             this.currentQuestion = this.questions[this.totalQuestions[num]].question;
-            this.currentChoices = this.questions[this.totalQuestions[num]].answerList;
+            this.currentChoices = this.questions[this.totalQuestions[num]].choiceList;
             this.currentImage = this.questions[this.totalQuestions[num]].image;
             this.totalQuestions.splice(num, 1);
         },
@@ -72,23 +70,24 @@ $(document).ready(function() {
                 player.displayTally();
             } else {
                 this.getQuestion();
-                this.randomlyOrderChoiceList();
+                this.shuffleChoiceList();
                 displayQuestionAndAnswers();
+                timer.reset();
+                timer.start();
             }
-            timer.reset();
-            timer.start();
         },
 
-        randomlyOrderChoiceList: function() {
-            var j = 0;
-            var shuffledChoices = [];
-    
-            for (var i = 0; i < 4; i++) {
-                j = Math.ceil(Math.random() * (this.currentChoices.length) - 1);;
-                shuffledChoices.push(this.currentChoices[j]);
-                this.currentChoices.splice(j, 1);
+        shuffleChoiceList: function() {
+            var currentPass = this.currentChoices.length
+            var index, temp;
+
+            while (currentPass > 0) {
+                index = Math.floor(Math.random() * currentPass);
+                currentPass--;
+                temp = this.currentChoices[currentPass];
+                this.currentChoices[currentPass] = this.currentChoices[index];
+                this.currentChoices[index] = temp;
             }
-            this.currentChoices = shuffledChoices;
         },
 
     };
@@ -105,7 +104,7 @@ $(document).ready(function() {
         },
 
         start: function() {
-            if ((!timer.timerRunning) && (!player.tallyCard)) {
+            if (!timer.timerRunning) {
                 timer.intervalId = setInterval(timer.countDown, 1000);
                 timer.timerRunning = true;
             }
