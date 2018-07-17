@@ -22,7 +22,7 @@ header {
     max-height: 265px !important;
 }
 
-div.tally-card {
+div.questions-card, .tally-gif{
     display: none;
 }
 

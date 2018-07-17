@@ -7,11 +7,13 @@ $(document).ready(function() {
         unanswered: 0,
 
         displayTally: function() {
-            $(".questions-card").hide();
-            $(".tally-card").show();
-            $("#correct").text(this.correctAnswers);
-            $("#incorrect").text(this.incorrectAnswers);
-            $("#unanswered").text(this.unanswered);
+            $(".img-question").hide();
+            $(".tally-gif").show();
+            $("li").removeClass("choices").empty();
+            $("li").eq(0).text(`Answered Cor-Rickly: ${this.correctAnswers}`);
+            $("li").eq(1).text(`Morty-fied: ${this.incorrectAnswers}`);
+            $("li").eq(2).text(`Unanswered: ${this.unanswered}`);
+            $("li").eq(3).addClass("try-again").text("Try Again???");
         }
     };
 
@@ -90,6 +92,11 @@ $(document).ready(function() {
             }
         },
 
+        setQuestionCard: function() {
+            $(".tally-gif").hide();
+            $("li").empty().addClass("choices");
+        }
+
     };
 
     var timer = {
@@ -142,27 +149,23 @@ $(document).ready(function() {
         player.correctAnswers =   0;
         player.incorrectAnswers = 0;
         player.unanswered =       0;
-        player.tallyCard  = false;
+        questionCard.setQuestionCard();
         questionCard.setTotalQuestionsArray();
         questionCard.getQuestionCard();
-        $(".tally-card").hide();
         $(".questions-card").show();
     };
 
     const displayQuestionAndAnswers = function() {
         questionCard.setImage();
-        $("#question").text(questionCard.currentQuestion);
-        $("#choiceA").text(questionCard.currentChoices[0]);
-        $("#choiceB").text(questionCard.currentChoices[1]);
-        $("#choiceC").text(questionCard.currentChoices[2]);
-        $("#choiceD").text(questionCard.currentChoices[3]);
+        $(".question").text(questionCard.currentQuestion);
+        $("li").eq(0).text(questionCard.currentChoices[0]);
+        $("li").eq(1).text(questionCard.currentChoices[1]);
+        $("li").eq(2).text(questionCard.currentChoices[2]);
+        $("li").eq(3).text(questionCard.currentChoices[3]);
     };
 
-    // Start Trivia Game
-    resetGame();
-
     // Events
-    $(".choices").on("click", function() {
+    $(document).on("click", ".choices", function() {
         if (questionCard.answers.includes($(this).html())) {
             player.correctAnswers++;
         } else {
@@ -172,7 +175,12 @@ $(document).ready(function() {
         questionCard.getQuestionCard();
     });
 
-    $(".try-again").on("click", function() {
+    $(document).on("click", ".try-again", function() {
+        resetGame();
+    })
+
+    $("button").on("click", function() {
+        $("button").hide();
         resetGame();
     })
 
