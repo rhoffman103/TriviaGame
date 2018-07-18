@@ -9,6 +9,8 @@ $(document).ready(function() {
         displayTally: function() {
             $(".img-question").hide();
             $(".tally-gif").show();
+            $(".question").empty();
+            $(".timer").hide();
             $("li").removeClass("choices").empty();
             $("li").eq(0).text(`Answered Cor-Rickly: ${this.correctAnswers}`);
             $("li").eq(1).text(`Morty-fied: ${this.incorrectAnswers}`);
@@ -63,7 +65,7 @@ $(document).ready(function() {
         },
 
         setImage: function() {
-            $(".img-question").attr({src: this.currentImage});
+            $(".img-question").attr({src: this.currentImage}).show();
         },
 
         getQuestionCard: function() {
@@ -157,6 +159,7 @@ $(document).ready(function() {
 
     const displayQuestionAndAnswers = function() {
         questionCard.setImage();
+        $(".timer").show();
         $(".question").text(questionCard.currentQuestion);
         $("li").eq(0).text(questionCard.currentChoices[0]);
         $("li").eq(1).text(questionCard.currentChoices[1]);
